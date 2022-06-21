@@ -1,11 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const config = require('config');
 const cors = require('cors');
+
+const { PORT, DB_URI } = require('./config/config');
 const router = require('./routes/index');
 
-const PORT = process.env.PORT || config.get('serverPort');
-const DB_URL = config.get('dbURL');
 
 const app = express();
 
@@ -15,7 +14,7 @@ app.use('/api', router);
 
 const start = async () => {
     try {
-        await mongoose.connect(DB_URL);
+        await mongoose.connect(DB_URI);
 
         app.listen(PORT, () => {
             console.log('Server started', PORT);

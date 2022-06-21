@@ -1,5 +1,0 @@
-{
-    "serverPort": 5000,
-    "dbURL": "mongodb+srv://user:user@cluster0.jgqf3.mongodb.net/?retryWrites=true&w=majority",
-    "secretKey": "kakoy-to-kluch"
-}

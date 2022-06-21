@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('config');
+const { SECRET_KEY } = require('../config/config');
 
 module.exports = function (req, res, next) {
     if (req.method === 'OPTIONS') {
@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
             res.status(401).json({ message: 'Not authorized' });
         }
 
-        const decoded = jwt.verify(token, config.get('secretKey'));
+        const decoded = jwt.verify(token, SECRET_KEY);
 
         req.user = decoded;
         next();

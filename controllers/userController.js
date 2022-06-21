@@ -1,15 +1,16 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const config = require('config');
+
+
 const User = require('../models/User');
-const { request } = require('express');
+const { SECRET_KEY } = require('../config/config');
 
 const generateToken = (id, email, role) => {
     return jwt.sign({
         id,
         email,
         role
-    }, config.get('secretKey'), {
+    }, SECRET_KEY, {
         expiresIn: '1h'
     });
 }
@@ -34,25 +35,13 @@ const checkUserExistence = async (username, email) => {
     };
 }
 
-const validateFields = (fields) => {
-    for (elem in fields) {
-        if (!fields[elem]) {
-            return true;
-        }
-    }
-}
-
 class UserController {
     registration = async (req, res) => {
-        if (validateFields(req.body)) {
-            return res.status(404).json({ message: 'Fields are required' });
-        }
-
         const { username, email, password } = req.body;
 
         const error = await checkUserExistence(username, email);
         if (error) {
-            return res.status(404).json({ error });
+            return res.status(400).json({ error });
         }
 
         const hashPassword = await bcrypt.hash(password, 7);
@@ -78,23 +67,27 @@ class UserController {
     };
 
     login = async (req, res) => {
-        if (validateFields(req.body)) {
-            return res.status(404).json({ message: 'Fields are required' });
-        }
-
         const { username, password } = req.body;
         const user = await User.findOne({ username }, {
             _id: 1, username: 1, email: 1, role: 1, password: 1
         }).lean();
 
         if (!user) {
-            return res.status(404).json({ error: { field: 'username', message: 'Incorrect username' } });
+            return res.status(404).json({
+                error: {
+                    message: 'Incorrect username or password'
+                }
+            });
         }
 
         const comparePassword = bcrypt.compareSync(password, user.password);
 
         if (!comparePassword) {
-            return res.status(404).json({ error: { field: 'password', message: 'Incorrect password' } });
+            return res.status(404).json({
+                error: {
+                    message: 'Incorrect username or password'
+                }
+            });
         }
 
         const token = generateToken(user._id, user.username, user.email, user.role);
