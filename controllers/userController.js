@@ -69,14 +69,17 @@ class UserController {
     login = async (req, res) => {
         const { username, password } = req.body;
         const user = await User.findOne({ username }, {
-            _id: 1, username: 1, email: 1, role: 1, password: 1
+            _id: 1,
+            username: 1,
+            email: 1,
+            role: 1,
+            password: 1,
+            status: 1
         }).lean();
 
         if (!user) {
             return res.status(404).json({
-                error: {
-                    message: 'Incorrect username or password'
-                }
+                message: 'Incorrect username or password'
             });
         }
 
@@ -84,9 +87,13 @@ class UserController {
 
         if (!comparePassword) {
             return res.status(404).json({
-                error: {
-                    message: 'Incorrect username or password'
-                }
+                message: 'Incorrect username or password'
+            });
+        }
+
+        if (user.status === 'blocked') {
+            return res.status(403).json({
+                message: 'Forbidden'
             });
         }
 

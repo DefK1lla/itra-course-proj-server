@@ -5,7 +5,8 @@ const User = new Schema({
     email: { type: String, required: true, unique: true, index: true },
     password: { type: String, required: true },
     role: { type: String, required: true, default: 'USER', index: true },
-    status: { type: String, required: true, default: 'active' }
+    status: { type: String, required: true, default: 'active' },
+    data: { type: Date, required: true, default: Date.now }
 });
 
 module.exports = model('User', User);
