@@ -3,7 +3,7 @@ const Router = require('express');
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const validationErrors = require('../middlewares/validationErrors');
-const registerValidation = require('../utils/validations');
+const { registerValidation } = require('../utils/validations');
 
 const authRouter = new Router();
 

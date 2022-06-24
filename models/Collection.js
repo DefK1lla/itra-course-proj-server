@@ -6,7 +6,8 @@ const Collection = new Schema({
     imgSrc: { type: String, required: false },
     fields: [{ title: { type: String }, type: { type: String } }],
     theme: { type: String, required: true },
-    user_id: { type: ObjectId, ref: 'User', index: true }
+    data: { type: Date, required: true, default: Date.now },
+    user_id: { type: ObjectId, ref: 'User', required: true, index: true }
 });
 
 module.exports = model('Collection', Collection);
