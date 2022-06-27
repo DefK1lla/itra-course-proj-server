@@ -6,7 +6,7 @@ const User = new Schema({
     password: { type: String, required: true },
     role: { type: String, required: true, default: 'USER', index: true },
     status: { type: String, required: true, default: 'active' },
-    data: { type: Date, required: true, default: Date.now }
+    timestamp: { type: Number, required: true, default: Date.now }
 });
 
 module.exports = model('User', User);

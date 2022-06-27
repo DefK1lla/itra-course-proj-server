@@ -5,9 +5,9 @@ const Collection = new Schema({
     description: { type: String, required: false },
     imgSrc: { type: String, required: false },
     fields: [{ title: { type: String }, type: { type: String } }],
-    theme: { type: String, required: true },
-    data: { type: Date, required: true, default: Date.now },
-    user_id: { type: ObjectId, ref: 'User', required: true, index: true }
+    theme: { type: ObjectId, ref: 'Theme', required: true },
+    timestamp: { type: Number, required: true, default: Date.now },
+    user: { type: ObjectId, ref: 'User', required: true, index: true }
 });
 
 module.exports = model('Collection', Collection);

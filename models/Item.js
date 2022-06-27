@@ -1,12 +1,12 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, ObjectId } = require('mongoose');
 
 const Item = new Schema({
     title: { type: String },
     info: [{ title: { type: String }, type: { type: String }, value: { type: String, index: true } }],
-    tags: { type: String, index: true },
-    date: { type: Date, required: true, default: Date.now },
-    collection_id: { type: ObjectId, ref: 'Collection', index: true },
-    user_id: { type: ObjectId, ref: 'User', index: true }
+    tags: { type: ObjectId, ref: 'Tag', index: true },
+    timestamp: { type: Number, required: true, default: Date.now },
+    collection: { type: ObjectId, ref: 'Collection', required: true, index: true },
+    user: { type: ObjectId, ref: 'User', required: true, index: true }
 });
 
 module.exports = model('Item', Item);
