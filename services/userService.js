@@ -27,7 +27,8 @@ class UserService {
             email: 1,
             role: 1,
             password: 1,
-            status: 1
+            status: 1,
+            timestamp: 1
         }).lean();
 
         const comparePassword = user ? bcrypt.compareSync(password, user.password) : false;
