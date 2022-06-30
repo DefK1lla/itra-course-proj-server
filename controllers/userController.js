@@ -1,50 +1,48 @@
-const jwt = require('jsonwebtoken');
-
-const { SECRET_KEY } = require('../utils/config');
 const userService = require('../services/userService');
 const errorHandler = require('../utils/errorHandler');
 
-const generateToken = ({ _id, email, role }) => {
-    return jwt.sign({
-        _id,
-        email,
-        role
-    }, SECRET_KEY, {
-        expiresIn: '24h'
-    });
-}
-
 class UserController {
-    registration = async (req, res) => {
+    get = async (req, res) => {
         try {
-            const { username, email, password } = req.body;
-            const user = await userService.create(username, email, password);
-            const token = generateToken({ ...user });
+            const users = await userService.getAll();
 
-            return res.json({ user, token });
+            return res.json(users);
         } catch (e) {
             console.log(e);
             errorHandler(res, e);
         }
     };
 
-    login = async (req, res) => {
+    block = async (req, res) => {
         try {
-            const { username, password } = req.body;
-            const user = await userService.login(username, password);
-            const token = generateToken({ ...user });
+            const { id } = req.body;
+            const user = await userService.blockById(id);
 
-            return res.json({ user, token });
+            res.json(user);
         } catch (e) {
             console.log(e);
             errorHandler(res, e);
         }
     };
 
-    authentication = async (req, res) => {
+    unBlock = async (req, res) => {
         try {
-            const token = generateToken({ ...req.user });
-            return res.json({ token });
+            const { id } = req.body;
+            const user = await userService.unBlockById(id);
+
+            res.json(user);
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
+
+    delete = async (req, res) => {
+        try {
+            const { id } = req.body;
+            const user = await userService.deleteById(id);
+
+            res.json(user);
         } catch (e) {
             console.log(e);
             errorHandler(res, e);

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/User');
+const userService = require('../services/userService');
 const { SECRET_KEY } = require('../utils/config');
 
 module.exports = async function (req, res, next) {
@@ -15,7 +15,7 @@ module.exports = async function (req, res, next) {
         }
 
         const decoded = jwt.verify(token, SECRET_KEY);
-        const user = await User.findById(decoded._id).lean();
+        const user = await userService.getOneById(decoded._id);
 
         if (user === null || user.status === 'blocked') {
             return res.status(401).json({ message: 'Unauthorized' });

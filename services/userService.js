@@ -14,7 +14,8 @@ class UserService {
             _id: newUser._id,
             username: newUser.username,
             email: newUser.email,
-            role: newUser.role
+            role: newUser.role,
+            timestamp: newUser.timestamp
         };
     }
 
@@ -57,10 +58,24 @@ class UserService {
             username: 1,
             email: 1,
             role: 1,
-            status: 1
+            status: 1,
+            timestamp: 1
         }).lean();
 
         return users;
+    };
+
+    getOneById = async (id) => {
+        const user = await User.findById(id, {
+            _id: 1,
+            username: 1,
+            email: 1,
+            role: 1,
+            status: 1,
+            timestamp: 1
+        }).lean();
+
+        return user;
     }
 
     blockById = async (id) => {
