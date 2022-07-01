@@ -4,7 +4,8 @@ const errorHandler = require('../utils/errorHandler');
 class UserController {
     get = async (req, res) => {
         try {
-            const users = await userService.getAll();
+            const { valueToOrderBy, order, page, rowsPerPage } = req.query;
+            const users = await userService.getAll(valueToOrderBy, order, page, rowsPerPage);
 
             return res.json(users);
         } catch (e) {

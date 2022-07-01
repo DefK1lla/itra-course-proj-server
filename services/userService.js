@@ -53,7 +53,7 @@ class UserService {
         return user;
     }
 
-    getAll = async () => {
+    getAll = async (valueToOrderBy, order, page, rowsPerPage) => {
         const users = await User.find({}, {
             _id: 1,
             username: 1,
@@ -61,7 +61,7 @@ class UserService {
             role: 1,
             status: 1,
             timestamp: 1
-        }).lean();
+        }).limit(rowsPerPage).skip(page * rowsPerPage).lean();
 
         return users;
     };
