@@ -61,7 +61,7 @@ class UserService {
             role: 1,
             status: 1,
             timestamp: 1
-        }).limit(rowsPerPage).skip(page * rowsPerPage).lean();
+        }).sort({ [valueToOrderBy]: order }).limit(rowsPerPage).skip(page * rowsPerPage).lean();
 
         return users;
     };
