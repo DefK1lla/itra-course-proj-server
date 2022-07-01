@@ -5,9 +5,9 @@ class UserController {
     get = async (req, res) => {
         try {
             const { valueToOrderBy, order, page, rowsPerPage } = req.query;
-            const users = await userService.getAll(valueToOrderBy, order, page, rowsPerPage);
+            const data = await userService.getAll(valueToOrderBy, order, page, rowsPerPage);
 
-            return res.json(users);
+            return res.json(data);
         } catch (e) {
             console.log(e);
             errorHandler(res, e);

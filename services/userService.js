@@ -54,7 +54,8 @@ class UserService {
     }
 
     getAll = async (valueToOrderBy, order, page, rowsPerPage) => {
-        const users = await User.find({}, {
+        const countQuery = User.count({});
+        const usersQuery = User.find({}, {
             _id: 1,
             username: 1,
             email: 1,
@@ -63,7 +64,12 @@ class UserService {
             timestamp: 1
         }).sort({ [valueToOrderBy]: order }).limit(rowsPerPage).skip(page * rowsPerPage).lean();
 
-        return users;
+        const [count, users] = await Promise.all([countQuery, usersQuery]);
+
+        return {
+            count,
+            users
+        };
     };
 
     getOneById = async (id) => {
