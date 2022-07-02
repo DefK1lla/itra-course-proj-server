@@ -85,41 +85,55 @@ class UserService {
         return user;
     }
 
-    blockById = async (id) => {
-        const user = await User.findByIdAndUpdate(id, { status: 'blocked' }, { new: true }).lean();
+    blockUsersById = async (ids) => {
+        const users = await Promise.all(ids.map(id => {
+          return User.findByIdAndUpdate(id, { status: 'blocked' }, { new: true }).lean();
+        }));
 
-        this.isUserFound(user);
-
-        delete user.password;
-        return user;
+        return {
+          success: users ? true : false
+        };
     };
 
-    unBlockById = async (id) => {
-        const user = await User.findByIdAndUpdate(id, { status: 'active' }, { new: true }).lean();
+    unBlockUsersById = async (ids) => {
+        const users = await Promise.all(ids.map(id => {
+          return User.findByIdAndUpdate(id, { status: 'active' }, { new: true }).lean();
+        }));
 
-        this.isUserFound(user);
-
-        delete user.password;
-        return user;
+        return {
+          success: users ? true : false
+        };
     };
 
-    deleteById = async (id) => {
-        const user = await User.findByIdAndDelete(id).lean();
+    deleteUsersById = async (ids) => {
+        const users = await Promise.all(ids.map(id => {
+          return  User.findByIdAndDelete(id).lean();
+        }));
 
-        this.isUserFound(user);
+        return {
+          success: users ? true : false
+        };
+    };
 
-        delete user.password;
-        return user;
-    }
+    addAdmins = async (ids) => {
+        const users = await Promise.all(ids.map(id => {
+          return User.findByIdAndUpdate(id, { role: 'ADMIN' }, { new: true }).lean();
+        }));
 
-    appointAdmin = async (id) => {
-        const user = await User.findByIdAndUpdate(id, { role: 'ADMIN' }, { new: true }).lean();
+        return {
+          success: users ? true : false
+        };
+    };
 
-        this.isUserFound(user);
+    deleteAdmins = async(ids) => {
+        const users = await Promise.all(ids.map(id => {
+            return User.findByIdAndUpdate(id, { role: 'USER' }, { new: true }).lean();
+        }));
 
-        delete user.password;
-        return user;
-    }
+        return {
+            success: users ? true : false
+        };
+    };
 
     checkUserExistence = async (username, email) => {
         const checkByUsername = await User.findOne({ username }).lean();

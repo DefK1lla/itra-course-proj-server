@@ -16,10 +16,10 @@ class UserController {
 
     block = async (req, res) => {
         try {
-            const { id } = req.body;
-            const user = await userService.blockById(id);
+            const { userIds } = req.body;
+            const isSuccess = await userService.blockUsersById(userIds);
 
-            res.json(user);
+            res.json({ succes: isSuccess });
         } catch (e) {
             console.log(e);
             errorHandler(res, e);
@@ -28,10 +28,10 @@ class UserController {
 
     unBlock = async (req, res) => {
         try {
-            const { id } = req.body;
-            const user = await userService.unBlockById(id);
+            const { userIds } = req.body;
+            const isSuccess = await userService.unBlockUsersById(userIds);
 
-            res.json(user);
+            res.json({ succes: isSuccess });
         } catch (e) {
             console.log(e);
             errorHandler(res, e);
@@ -40,10 +40,34 @@ class UserController {
 
     delete = async (req, res) => {
         try {
-            const { id } = req.body;
-            const user = await userService.deleteById(id);
+            const { userIds } = req.query;
+            const isSuccess = await userService.deleteUsersById(userIds);
 
-            res.json(user);
+            res.json({ succes: isSuccess });
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
+
+    addAdmins = async (req, res) => {
+        try {
+            const { userIds } = req.body;
+            const isSuccess = await userService.addAdmins(userIds);
+
+            res.json({ succes: isSuccess });
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
+
+    deleteAdmins = async (req, res) => {
+        try {
+            const { userIds } = req.query;
+            const isSuccess = await userService.deleteAdmins(userIds);
+
+            res.json({ succes: isSuccess });
         } catch (e) {
             console.log(e);
             errorHandler(res, e);
