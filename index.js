@@ -12,16 +12,16 @@ app.use(express.json());
 app.use('/api', router);
 
 const start = async () => {
-    try {
-        await mongoose.connect(DB_URI);
+   try {
+      await mongoose.connect(DB_URI);
 
-        app.listen(PORT, () => {
-            console.log('Server started', PORT);
-        });
+      app.listen(PORT, () => {
+         console.log('Server started', PORT);
+      });
 
-    } catch (e) {
-        console.log(e)
-    }
+   } catch (e) {
+      console.log(e)
+   }
 }
 
 start();
