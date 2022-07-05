@@ -6,9 +6,9 @@ class CollectionController {
       try {
          const { collection, fields } = req.body;
          const userId = req.user._id;
-         const data = await collectionService.create(collection, userId, fields);
+         const newCollection = await collectionService.create(collection, userId, fields);
 
-         return res.json(data);
+         return res.json(newCollection);
       } catch(e) { 
          console.log(e);
          errorHandler(res, e);
@@ -17,10 +17,11 @@ class CollectionController {
 
    updateOne = async (req, res) => {
       try {
-         const { id, collection, fields } = req.body;
-         const data = await collectionService.updateOneById(id, collection, fields);
+         const { id } = req.params;
+         const { collection, fields } = req.body;
+         const updeatedCollection = await collectionService.updateOneById(id, collection, fields);
 
-         return res.json(data);
+         return res.json(updeatedCollection);
       } catch(e) { 
          console.log(e);
          errorHandler(res, e);
@@ -30,11 +31,9 @@ class CollectionController {
    deleteOne = async (req, res) => {
       try {
          const { id } = req.params;
-         const isSuccess = await collectionService.deleteOneById(id);
+         const deletedCollection = await collectionService.deleteOneById(id);
 
-         return res.json({
-            success: isSuccess
-         });
+         return res.json(deletedCollection);
       } catch(e) {
          console.log(e);
          errorHandler(res, e);

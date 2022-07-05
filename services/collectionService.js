@@ -8,7 +8,7 @@ class CollectionService {
          userRef: userId 
       }).save();
 
-      await Promise.all(fields.map(field => (
+      Promise.all(fields.map(field => (
          new Field({ 
             ...field,
             collectionRef: newCollection._id
@@ -19,19 +19,28 @@ class CollectionService {
    };
 
    updateOneById = async (id, collection, fields) => {
+      const updatedCollection = await Collection.findByIdAndUpdate(id, collection).lean();
+      this.isCollectionFound(updatedCollection);
+      Promise.all(fields.map(field => {
+         if(field._id) return Field.findByIdAndUpdate(field._id, field);
+         return new Field({ 
+            ...field, 
+            collectionRef: updatedCollection._id 
+         }).save();
+      }));
 
+      return { ...updatedCollection, fields };
    };
 
    deleteOneById = async (id) => {
       const deletedCollection = await Collection.findByIdAndDelete(id).lean();
-
       this.isCollectionFound(deletedCollection);
-
-      const fields  = Field.deleteMany({ collectionRef: deletedCollection._id }).exec();
+      const fields = await Field.find({ collectionRef: deletedCollection._id }).lean();
+      await Field.deleteMany({ collectionRef: deletedCollection._id });
 
       // ToDo delete items
 
-      return Boolean(deletedCollection);
+      return { ...deletedCollection, fields};
    };
 
    isCollectionFound = (collection) => {
