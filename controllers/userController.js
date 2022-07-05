@@ -2,77 +2,53 @@ const userService = require('../services/userService');
 const errorHandler = require('../utils/errorHandler');
 
 class UserController {
-   get = async (req, res) => {
-      try {
-         const { orderBy, order, page, rowsPerPage } = req.query;
-         const data = await userService.getAll(orderBy, order, page, rowsPerPage);
+    get = async (req, res) => {
+        try {
+            const { valueToOrderBy, order, page, rowsPerPage } = req.query;
+            const users = await userService.getAll(valueToOrderBy, order, page, rowsPerPage);
 
-         return res.json(data);
-      } catch (e) {
-         console.log(e);
-         errorHandler(res, e);
-      }
-   };
+            return res.json(users);
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
 
-   block = async (req, res) => {
-      try {
-         const { userIds } = req.body;
-         const isSuccess = await userService.blockUsersById(userIds);
+    block = async (req, res) => {
+        try {
+            const { id } = req.body;
+            const user = await userService.blockById(id);
 
-         res.json({ succes: isSuccess });
-      } catch (e) {
-         console.log(e);
-         errorHandler(res, e);
-      }
-   };
+            res.json(user);
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
 
-   unBlock = async (req, res) => {
-      try {
-         const { userIds } = req.body;
-         const isSuccess = await userService.unBlockUsersById(userIds);
+    unBlock = async (req, res) => {
+        try {
+            const { id } = req.body;
+            const user = await userService.unBlockById(id);
 
-         res.json({ succes: isSuccess });
-      } catch (e) {
-         console.log(e);
-         errorHandler(res, e);
-      }
-   };
+            res.json(user);
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
 
-   delete = async (req, res) => {
-      try {
-         const { userIds } = req.query;
-         const isSuccess = await userService.deleteUsersById(userIds);
+    delete = async (req, res) => {
+        try {
+            const { id } = req.body;
+            const user = await userService.deleteById(id);
 
-         res.json({ succes: isSuccess });
-      } catch (e) {
-         console.log(e);
-         errorHandler(res, e);
-      }
-   };
-
-   addAdmins = async (req, res) => {
-      try {
-         const { userIds } = req.body;
-         const isSuccess = await userService.addAdmins(userIds);
-
-         res.json({ succes: isSuccess });
-      } catch (e) {
-         console.log(e);
-         errorHandler(res, e);
-      }
-   };
-
-   deleteAdmins = async (req, res) => {
-      try {
-         const { userIds } = req.query;
-         const isSuccess = await userService.deleteAdmins(userIds);
-
-         res.json({ succes: isSuccess });
-      } catch (e) {
-         console.log(e);
-         errorHandler(res, e);
-      }
-   };
+            res.json(user);
+        } catch (e) {
+            console.log(e);
+            errorHandler(res, e);
+        }
+    };
 }
 
 module.exports = new UserController();
