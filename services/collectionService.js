@@ -8,14 +8,21 @@ class CollectionService {
          userRef: userId 
       }).save();
 
-      Promise.all(fields.map(field => (
+      const newFields = await Promise.all(fields.map(field => (
          new Field({ 
             ...field,
             collectionRef: newCollection._id
          }).save()
       )));
 
-      return newCollection;
+      return { ...newCollection._doc, fields: newFields };
+   };
+
+   getOneById = async (id) => {
+      const collection = await Collection.findById(id);
+      this.isCollectionFound(collection);
+
+      return collection; 
    };
 
    updateOneById = async (id, collection, fields) => {
