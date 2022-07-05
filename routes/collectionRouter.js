@@ -8,6 +8,7 @@ const collectionRouter = new Router();
 
 collectionRouter.post('/', authMiddleware, collectionController.create);
 collectionRouter.put('/:id', authMiddleware, authCheck, collectionController.updateOne);
+collectionRouter.get('/:id/edit', authMiddleware, authCheck, collectionController.getOneWithFields);
 collectionRouter.delete('/:id', authMiddleware, authCheck, collectionController.deleteOne);
 
 module.exports = collectionRouter;

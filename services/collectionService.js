@@ -50,6 +50,13 @@ class CollectionService {
       return { ...deletedCollection, fields};
    };
 
+   getOneWithFields = async (id) => {
+      const collection = await Collection.findById(id).lean();
+      const fields = await Field.find({ collectionRef: id }).lean();
+
+      return { ...collection, fields };
+   };
+
    isCollectionFound = (collection) => {
       if(!collection) {
          throw {

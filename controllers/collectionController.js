@@ -39,6 +39,18 @@ class CollectionController {
          errorHandler(res, e);
       }
    };
+
+   getOneWithFields = async (req, res) => {
+      try {
+         const { id } = req.params;
+         const collectionWithFields = await collectionService.getOneWithFields(id);
+
+         return res.json(collectionWithFields);
+      } catch(e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
 }
 
 module.exports = new CollectionController();
