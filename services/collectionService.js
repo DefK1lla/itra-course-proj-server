@@ -43,7 +43,7 @@ class CollectionService {
       const deletedCollection = await Collection.findByIdAndDelete(id).lean();
       this.isCollectionFound(deletedCollection);
       const fields = await Field.find({ collectionRef: deletedCollection._id }).lean();
-      await Field.deleteMany({ collectionRef: deletedCollection._id });
+      Field.deleteMany({ collectionRef: deletedCollection._id });
 
       // ToDo delete items
 
