@@ -22,14 +22,7 @@ class UserService {
    login = async (username, password) => {
       username = username.toLowerCase();
       const user = await User.findOne({ username }, {
-         _id: 1,
-         username: 1,
-         email: 1,
-         role: 1,
-         password: 1,
-         status: 1,
-         timestamp: 1
-      }).lean();
+         _id: 1, username: 1, email: 1, role: 1, password: 1, status: 1, timestamp: 1 }).lean();
 
       const comparePassword = user ? bcrypt.compareSync(password, user.password) : false;
 
@@ -56,26 +49,15 @@ class UserService {
    getAll = async (orderBy, order, page, rowsPerPage) => {
       const count = await User.count();
       const users = await User.find({}, {
-         _id: 1,
-         username: 1,
-         email: 1,
-         role: 1,
-         status: 1,
-         timestamp: 1
-      }).limit(rowsPerPage).sort({ [orderBy]: order }).skip(page * rowsPerPage).lean();
+         _id: 1, username: 1, email: 1, role: 1, status: 1, timestamp: 1 })
+         .limit(rowsPerPage).sort({ [orderBy]: order }).skip(page * rowsPerPage).lean();
 
      return { users, count };
    };
 
    getOneById = async (id) => {
       const user = await User.findById(id, {
-         _id: 1,
-         username: 1,
-         email: 1,
-         role: 1,
-         status: 1,
-         timestamp: 1
-      }).lean();
+         _id: 1, username: 1, email: 1, role: 1, status: 1, timestamp: 1 }).lean();
 
       return user;
    };
