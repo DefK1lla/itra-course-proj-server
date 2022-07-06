@@ -52,9 +52,20 @@ class CollectionService {
 
    getOneWithFields = async (id) => {
       const collection = await Collection.findById(id).lean();
+      this.isCollectionFound(collection)
       const fields = await Field.find({ collectionRef: id }).lean();
 
       return { ...collection, fields };
+   };
+
+   getUserCollections = async (userId) => {
+      const collections = await Collection.find({ useRef: userId })
+         .select({ title: 1, imgSrc: 1, theme: 1, itemsCount: 1 })
+         .lean();
+
+      this.isCollectionFound(collections);
+
+      return collections;
    };
 
    isCollectionFound = (collection) => {

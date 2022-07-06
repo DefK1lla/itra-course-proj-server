@@ -1,4 +1,5 @@
 const userService = require('../services/userService');
+const collectionService = require('../services/collectionService');
 const errorHandler = require('../utils/errorHandler');
 
 class UserController {
@@ -9,6 +10,19 @@ class UserController {
 
          return res.json(data);
       } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
+   getOne = async (req, res) => {
+      try {
+         const { userId } = req.params;
+         const [user, collections] = 
+            await Promise.all([userService.getOneById(userId), collectionService.getUserCollections(userId)]);
+         
+         return res.json({ user, collections });
+      } catch(e) {
          console.log(e);
          errorHandler(res, e);
       }
