@@ -15,7 +15,7 @@ class UserController {
       }
    };
 
-   getOne = async (req, res) => {
+   getOneWithCollections = async (req, res) => {
       try {
          const { userId } = req.params;
          const [user, collections] = 

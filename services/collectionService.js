@@ -59,10 +59,10 @@ class CollectionService {
    };
 
    getUserCollections = async (userId) => {
-      const collections = await Collection.find({ useRef: userId })
-         .select({ title: 1, imgSrc: 1, theme: 1, itemsCount: 1 })
+      const collections = await Collection.find({ userRef: userId })
+         .select({ title: 1, imgSrc: 1, theme: 1, itemsCount: 1, userRef: 1, timestamp: 1 })
+         .populate({ path: 'userRef', select: 'username'})
          .lean();
-
       this.isCollectionFound(collections);
 
       return collections;
