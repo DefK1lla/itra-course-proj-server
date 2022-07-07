@@ -74,7 +74,7 @@ class CollectionController {
          console.log(e);
          errorHandler(res, e);
       }
-   }
+   };
 }
 
 module.exports = new CollectionController();
