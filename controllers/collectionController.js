@@ -25,7 +25,7 @@ class CollectionController {
          console.log(e);
          errorHandler(res, e);
       }
-   }
+   };
 
    updateOne = async (req, res) => {
       try {
@@ -63,6 +63,18 @@ class CollectionController {
          errorHandler(res, e);
       }
    };
+
+   getUserCollections = async (req, res) => {
+      try {
+         const { userId } = req.params;
+         const collection = await collectionService.getUserCollections(userId);
+
+         return res.json(collection);
+      } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   }
 }
 
 module.exports = new CollectionController();

@@ -18,10 +18,9 @@ class UserController {
    getOneWithCollections = async (req, res) => {
       try {
          const { userId } = req.params;
-         const [user, collections] = 
-            await Promise.all([userService.getOneById(userId), collectionService.getUserCollections(userId)]);
+         const user = await userService.getOneById(userId);
          
-         return res.json({ user, collections });
+         return res.json(user);
       } catch(e) {
          console.log(e);
          errorHandler(res, e);
