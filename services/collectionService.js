@@ -19,7 +19,9 @@ class CollectionService {
    };
 
    getOneById = async (id) => {
-      const collection = await Collection.findById(id);
+      const collection = await Collection.findById(id)
+         .populate({ path: 'userRef', select: 'username'})
+         .lean();
       this.isCollectionFound(collection);
 
       return collection; 

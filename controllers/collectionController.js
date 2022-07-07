@@ -15,6 +15,18 @@ class CollectionController {
       }
    };
 
+   getOne = async (req, res) => {
+      try {
+         const { id } = req.params;
+         const collection = await collectionService.getOneById(id);
+
+         return res.json(collection);
+      } catch(e) { 
+         console.log(e);
+         errorHandler(res, e);
+      }
+   }
+
    updateOne = async (req, res) => {
       try {
          const { id } = req.params;
