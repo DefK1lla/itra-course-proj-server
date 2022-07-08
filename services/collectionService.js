@@ -8,12 +8,16 @@ class CollectionService {
          userRef: userId 
       }).save();
 
-      const newFields = await Promise.all(fields.map(field => (
-         new Field({ 
-            ...field,
-            collectionRef: newCollection._id
-         }).save()
-      )));
+      let newFields = [];
+
+      if (fields) {
+            newFields = await Promise.all(fields.map(field => (
+               new Field({ 
+                  ...field,
+                  collectionRef: newCollection._id
+               }).save()
+         )));
+      }
 
       return { ...newCollection._doc, fields: newFields };
    };
@@ -58,6 +62,12 @@ class CollectionService {
       const fields = await Field.find({ collectionRef: id }).lean();
 
       return { ...collection, fields };
+   };
+
+   getFields = async (id) => {
+      const fields = await Field.find({ collectionRef: id });
+
+      return fields;
    };
 
    getUserCollections = async (userId) => {

@@ -27,4 +27,4 @@ module.exports = async function (req, res, next) {
       console.log(e)
       res.status(401).json({ message: 'Unauthorized' });
    }
-}
+};

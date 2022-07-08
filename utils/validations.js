@@ -13,4 +13,4 @@ const collectionValidation = [
    body('imgSrc', 'Incorrect link').optional().isURL()
 ];
 
-module.exports = { registerValidation, collectionValidation }
+module.exports = { registerValidation, collectionValidation };

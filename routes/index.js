@@ -1,16 +1,19 @@
 const Router = require('express');
 const authRouter = require('./authRouter');
 const userRouter = require('./userRouter');
-const collectionRouter = require('./collectionRouter');
-const fileRouter = require('./fileRouter');
 const themeRouter = require('./themeRouter');
+const collectionRouter = require('./collectionRouter');
+const itemRouter = require('./itemRouter');
+const fileRouter = require('./fileRouter');
 
 const router = new Router();
 
 router.use('/auth', authRouter);
 router.use('/users', userRouter);
-router.use('/collection', collectionRouter);
-router.use('/file', fileRouter);
 router.use('/theme', themeRouter);
+router.use('/collection', collectionRouter);
+router.use('/item', itemRouter);
+router.use('/file', fileRouter);
+
 
 module.exports = router;

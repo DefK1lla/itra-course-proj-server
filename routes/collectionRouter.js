@@ -6,8 +6,9 @@ const accessCheck = require('../middlewares/accessCheck');
 
 const collectionRouter = new Router();
 
-collectionRouter.post('/', authMiddleware, collectionController.create);
+collectionRouter.post('/', authMiddleware, accessCheck, collectionController.create);
 collectionRouter.get('/:id', collectionController.getOne);
+collectionRouter.get('/fields/:id', authMiddleware, accessCheck, collectionController.getFields);
 collectionRouter.get('/user/:userId', collectionController.getUserCollections);
 collectionRouter.put('/:id', authMiddleware, accessCheck, collectionController.updateOne);
 collectionRouter.get('/:id/edit', authMiddleware, accessCheck, collectionController.getOneWithFields);

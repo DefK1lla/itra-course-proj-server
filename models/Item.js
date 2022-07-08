@@ -1,12 +1,15 @@
 const { Schema, model, ObjectId } = require('mongoose');
 
 const Item = new Schema({
-   title: { type: String },
-   info: [{ title: { type: String }, type: { type: String }, value: { type: String, index: true } }],
-   tags: { type: ObjectId, ref: 'Tag', index: true },
+   title: { type: String, required: true, index: true },
+   fields: [{
+      fieldRef: { type: ObjectId, ref: 'Field', required: true, index: true },
+      value: { type: String, required: true, index: true }
+   }],
+   tags: [{ type: String,  index: true }],
    timestamp: { type: Number, required: true, default: Date.now },
-   collection: { type: ObjectId, ref: 'Collection', required: true, index: true },
-   user: { type: ObjectId, ref: 'User', required: true, index: true }
+   collectionRef: { type: ObjectId, ref: 'Collection', required: true, index: true },
+   userRef: { type: ObjectId, ref: 'User', required: true, index: true }
 });
 
 module.exports = model('Item', Item);

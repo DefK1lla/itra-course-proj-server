@@ -64,6 +64,18 @@ class CollectionController {
       }
    };
 
+   getFields = async (req, res) => {
+      try {
+         const { id } = req.params;
+         const fields = await collectionService.getFields(id);
+
+         res.json(fields);
+      } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
    getUserCollections = async (req, res) => {
       try {
          const { userId } = req.params;
