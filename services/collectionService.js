@@ -5,7 +5,6 @@ class CollectionService {
    create = async (collection, userId, fields) => {
       const newCollection = await new Collection({ 
          ...collection, 
-         userRef: userId 
       }).save();
 
       let newFields = [];

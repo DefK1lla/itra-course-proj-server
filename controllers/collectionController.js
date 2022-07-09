@@ -5,8 +5,7 @@ class CollectionController {
    create = async (req, res) => {
       try {
          const { collection, fields } = req.body;
-         const userId = req.user._id;
-         const newCollection = await collectionService.create(collection, userId, fields);
+         const newCollection = await collectionService.create(collection, fields);
 
          return res.json(newCollection);
       } catch(e) { 

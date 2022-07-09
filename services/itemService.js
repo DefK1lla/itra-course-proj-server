@@ -1,5 +1,6 @@
 const Item = require('../models/Item');
 const collectionService = require('../services/collectionService');
+const tagService = require('../services/tagService');
 
 class ItemService {
    create = async (item, userId) => {
@@ -8,8 +9,11 @@ class ItemService {
          userRef: userId
       }).save();
 
+      tagService.create(item.tags);
+
       const count = await Item.count({ collectionRef: item.collectionRef });
       await collectionService.updateItemsCount(item.collectionRef, count);
+
 
       return newItem;
    };
@@ -26,7 +30,6 @@ class ItemService {
          })
          .populate('fields.fieldRef')
          .lean();
-
 
       this.isItemFound(item);
 
