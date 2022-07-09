@@ -80,6 +80,10 @@ class CollectionService {
       return collections;
    };
 
+   updateItemsCount = async (id, count) => {
+      await Collection.findByIdAndUpdate(id, { itemsCount: count });
+   };
+
    isCollectionFound = (collection) => {
       if(!collection) {
          throw {
