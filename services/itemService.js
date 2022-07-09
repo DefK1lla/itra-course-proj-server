@@ -30,7 +30,6 @@ class ItemService {
          })
          .populate('fields.fieldRef')
          .lean();
-
       this.isItemFound(item);
 
       return item;
