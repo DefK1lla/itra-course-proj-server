@@ -9,7 +9,7 @@ class ItemService {
          userRef: userId
       }).save();
 
-      tagService.create(item.tags);
+      tagService.update(item.tags);
 
       const count = await Item.count({ collectionRef: item.collectionRef });
       await collectionService.updateItemsCount(item.collectionRef, count);
@@ -47,7 +47,8 @@ class ItemService {
 
    updateOneById = async (id, item) => {
       const updatedItem = await Item.findByIdAndUpdate(id, item).lean();
-       this.isItemFound(item);
+      this.isItemFound(item);
+      tagService.update(item.tags);
 
       return updatedItem;
    };

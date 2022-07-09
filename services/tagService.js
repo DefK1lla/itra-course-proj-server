@@ -1,7 +1,7 @@
 const Tag = require('../models/Tag');
 
 class TagService {
-   create = async (tagNames) => {
+   update = async (tagNames) => {
       Promise.all(tagNames.map(tagName => {
          Tag.findOne({ title: tagName }).exec((err, res) => {
             if (err) throw err;
