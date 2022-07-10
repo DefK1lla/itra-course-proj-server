@@ -2,16 +2,17 @@ const Router = require('express');
 
 const collectionController = require('../controllers/collectionController');
 const authMiddleware = require('../middlewares/authMiddleware');
-const accessCheck = require('../middlewares/accessCheck');
+const CollectionAccessCheck = require('../middlewares/CollectionAccessCheck');
 
 const collectionRouter = new Router();
 
-collectionRouter.post('/', authMiddleware, accessCheck, collectionController.create);
+
 collectionRouter.get('/:id', collectionController.getOne);
-collectionRouter.get('/fields/:id', authMiddleware, accessCheck, collectionController.getFields);
 collectionRouter.get('/user/:userId', collectionController.getUserCollections);
-collectionRouter.put('/:id', authMiddleware, accessCheck, collectionController.updateOne);
-collectionRouter.get('/:id/edit', authMiddleware, accessCheck, collectionController.getOneWithFields);
-collectionRouter.delete('/:id', authMiddleware, accessCheck, collectionController.deleteOne);
+collectionRouter.post('/', authMiddleware, CollectionAccessCheck, collectionController.create);
+collectionRouter.get('/fields/:id', authMiddleware, CollectionAccessCheck, collectionController.getFields);
+collectionRouter.put('/:id', authMiddleware, CollectionAccessCheck, collectionController.updateOne);
+collectionRouter.get('/:id/edit', authMiddleware, CollectionAccessCheck, collectionController.getOneWithFields);
+collectionRouter.delete('/:id', authMiddleware, CollectionAccessCheck, collectionController.deleteOne);
 
 module.exports = collectionRouter;
