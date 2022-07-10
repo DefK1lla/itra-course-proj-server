@@ -1,8 +1,10 @@
 const Collection = require('../models/Collection');
 const Field = require('../models/Field');
+const Item = require('../models/Item');
+const itemService = require('../services/itemService');
 
 class CollectionService {
-   create = async (collection, userId, fields) => {
+   create = async (collection, fields) => {
       const newCollection = await new Collection({ 
          ...collection, 
       }).save();
@@ -10,7 +12,7 @@ class CollectionService {
       let newFields = [];
 
       if (fields) {
-            newFields = await Promise.all(fields.map(field => (
+         newFields = await Promise.all(fields.map(field => (
                new Field({ 
                   ...field,
                   collectionRef: newCollection._id
@@ -33,27 +35,43 @@ class CollectionService {
    updateOneById = async (id, collection, fields) => {
       const updatedCollection = await Collection.findByIdAndUpdate(id, collection).lean();
       this.isCollectionFound(updatedCollection);
-      
+
       if (fields) {
-         Promise.all(fields.map(field => {
-            if(field._id) return Field.findByIdAndUpdate(field._id, field);
+         let newFields = fields.filter(field => !field._id);
+         let fieldsToUpdate = fields.filter(field => field._id);
+
+         const oldFields = await Field.find({ collectionRef: updatedCollection._id });
+         const updatedFields = await Promise.all(oldFields.map(oldField => {
+            const fieldToUpdate = fieldsToUpdate.find(fieldToUpdate => 
+               String(fieldToUpdate._id) === String(oldField._id)
+            );
+             
+            if (fieldToUpdate) return oldField.updateOne(fieldToUpdate);
+
+            const items = Item.updateMany({ collectionRef: updatedCollection._id }, {
+               '$pull': { fields: { fieldRef: oldField._id } }
+            }).exec();
+
+            return oldField.remove();
+         }));
+
+         newFields = await Promise.all(newFields.map(newField => {
             return new Field({ 
-               ...field, 
+               ...newField, 
                collectionRef: updatedCollection._id 
             }).save();
          }));
       }
 
-      return { ...updatedCollection, fields };
+      return { ...updatedCollection };
    };
 
    deleteOneById = async (id) => {
       const deletedCollection = await Collection.findByIdAndDelete(id).lean();
       this.isCollectionFound(deletedCollection);
       const fields = await Field.find({ collectionRef: deletedCollection._id }).lean();
-      Field.deleteMany({ collectionRef: deletedCollection._id });
-
-      // ToDo delete items
+      Field.deleteMany({ collectionRef: deletedCollection._id }).exec();
+      Item.deleteMany({ collectionRef: deletedCollection._id }).exec();
 
       return { ...deletedCollection, fields};
    };
@@ -80,10 +98,6 @@ class CollectionService {
       this.isCollectionFound(collections);
 
       return collections;
-   };
-
-   updateItemsCount = async (id, count) => {
-      await Collection.findByIdAndUpdate(id, { itemsCount: count });
    };
 
    isCollectionFound = (collection) => {

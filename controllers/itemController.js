@@ -5,8 +5,7 @@ class ItemController {
    create = async (req, res) => {
       try {
          const item = req.body;
-         const userId = req.user._id;
-         const newItem = await itemService.create(item, userId);
+         const newItem = await itemService.create(item);
 
          return res.json(newItem);
       } catch(e) {
@@ -19,7 +18,7 @@ class ItemController {
       try {
          const { id } = req.params;
          const { userId } = req.query;
-         const item = await itemService.getOne(id, userId);
+         const item = await itemService.getOneById(id, userId);
 
          return res.json(item);
       } catch(e) {
@@ -47,6 +46,18 @@ class ItemController {
          const updatedItem = await itemService.updateOneById(id, item);
 
          return res.json(updatedItem);
+      } catch(e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
+   deleteOne = async (req, res) => {
+      try {
+         const { id } = req.params;
+         const deletedItem = await itemService.deleteOneById(id);
+
+         return res.json(deletedItem);
       } catch(e) {
          console.log(e);
          errorHandler(res, e);

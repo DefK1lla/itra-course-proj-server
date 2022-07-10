@@ -1,25 +1,23 @@
 const Item = require('../models/Item');
 const Like = require('../models/Like');
-const collectionService = require('../services/collectionService');
+const Collection = require('../models/Collection');
 const tagService = require('../services/tagService');
 
 class ItemService {
-   create = async (item, userId) => {
+   create = async (item) => {
       const newItem = await new Item({
-         ...item,
-         userRef: userId
+         ...item
       }).save();
 
       tagService.update(item.tags);
-
+      
       const count = await Item.count({ collectionRef: item.collectionRef });
-      await collectionService.updateItemsCount(item.collectionRef, count);
-
+      await Collection.findByIdAndUpdate(item.collectionRef, { itemsCount: count });
 
       return newItem;
    };
 
-   getOne = async (id, userId) => {
+   getOneById = async (id, userId) => {
       const item = await Item.findById(id)
          .populate({ 
             path: 'userRef', 
@@ -56,6 +54,17 @@ class ItemService {
       tagService.update(item.tags);
 
       return updatedItem;
+   };
+
+   deleteOneById = async (id) => {
+      const deletedItem = await Item.findByIdAndDelete(id).lean();
+      this.isItemFound(deletedItem);
+
+      return { ...deletedItem};
+   };
+
+   deleteCollectionItems = async (collectionId) => {
+      await Item.deleteMany({ collectionRef: collectionId });
    };
 
    like = async (id, userId) => {
