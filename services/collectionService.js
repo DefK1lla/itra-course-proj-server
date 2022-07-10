@@ -48,7 +48,7 @@ class CollectionService {
              
             if (fieldToUpdate) return oldField.updateOne(fieldToUpdate);
 
-            const items = Item.updateMany({ collectionRef: updatedCollection._id }, {
+            Item.updateMany({ collectionRef: updatedCollection._id }, {
                '$pull': { fields: { fieldRef: oldField._id } }
             }).exec();
 
