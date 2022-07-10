@@ -59,7 +59,7 @@ class UserService {
 
    getOneById = async (id) => {
       const user = await User.findById(id)
-         .select({ _id: 1, username: 1, email: 1, status: 1, timestamp: 1 })
+         .select({ _id: 1, username: 1, email: 1, role: 1, status: 1, timestamp: 1 })
          .lean();
 
       return user;

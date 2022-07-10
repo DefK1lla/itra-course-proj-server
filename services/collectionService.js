@@ -33,13 +33,16 @@ class CollectionService {
    updateOneById = async (id, collection, fields) => {
       const updatedCollection = await Collection.findByIdAndUpdate(id, collection).lean();
       this.isCollectionFound(updatedCollection);
-      Promise.all(fields.map(field => {
-         if(field._id) return Field.findByIdAndUpdate(field._id, field);
-         return new Field({ 
-            ...field, 
-            collectionRef: updatedCollection._id 
-         }).save();
-      }));
+      
+      if (fields) {
+         Promise.all(fields.map(field => {
+            if(field._id) return Field.findByIdAndUpdate(field._id, field);
+            return new Field({ 
+               ...field, 
+               collectionRef: updatedCollection._id 
+            }).save();
+         }));
+      }
 
       return { ...updatedCollection, fields };
    };
