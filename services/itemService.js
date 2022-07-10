@@ -1,4 +1,5 @@
 const Item = require('../models/Item');
+const Like = require('../models/Like');
 const collectionService = require('../services/collectionService');
 const tagService = require('../services/tagService');
 
@@ -18,7 +19,7 @@ class ItemService {
       return newItem;
    };
 
-   getOne = async (id) => {
+   getOne = async (id, userId) => {
       const item = await Item.findById(id)
          .populate({ 
             path: 'userRef', 
@@ -30,8 +31,12 @@ class ItemService {
          })
          .populate('fields.fieldRef')
          .lean();
-
       this.isItemFound(item);
+
+      if (userId) {
+         const like = await Like.findOne({ userRef: userId, itemRef: id });
+         item.isLiked = Boolean(like);
+      }
 
       return item;
    };
@@ -51,6 +56,24 @@ class ItemService {
       tagService.update(item.tags);
 
       return updatedItem;
+   };
+
+   like = async (id, userId) => {
+      const like = await new Like({ userRef: userId, itemRef: id }).save();
+      Item.findByIdAndUpdate(id, {
+         $inc: { likesCount: 1 }
+      }).exec();
+
+      return like;
+   };
+
+   dislike = async (id, userId) => {
+      const like = await Like.findOneAndDelete({ userRef: userId, itemRef: id }).lean();
+      Item.findByIdAndUpdate(id, {
+         $inc: { likesCount: -1 }
+      }).exec();
+
+      return like;
    };
 
    isItemFound = (item) => {

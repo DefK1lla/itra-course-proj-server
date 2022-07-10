@@ -18,7 +18,8 @@ class ItemController {
    getOne = async (req, res) => {
       try {
          const { id } = req.params;
-         const item = await itemService.getOne(id);
+         const { userId } = req.query;
+         const item = await itemService.getOne(id, userId);
 
          return res.json(item);
       } catch(e) {
@@ -46,6 +47,32 @@ class ItemController {
          const updatedItem = await itemService.updateOneById(id, item);
 
          return res.json(updatedItem);
+      } catch(e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
+   like = async (req, res) => {
+      try {
+         const { id } = req.params;
+         const userId = req.user._id;
+         const like = await itemService.like(id, userId);
+
+         return res.json(like);
+      } catch(e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
+   dislike = async (req, res) => {
+      try {
+         const { id } = req.params;
+         const userId = req.user._id;
+         const like = await itemService.dislike(id, userId);
+
+         return res.json(like);
       } catch(e) {
          console.log(e);
          errorHandler(res, e);
