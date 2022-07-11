@@ -39,6 +39,23 @@ class ItemService {
       return item;
    };
 
+   getLatest = async () => {
+      const items = await Item.find()
+         .populate({ 
+            path: 'userRef', 
+            select: 'username'
+         })
+         .populate({ 
+            path: 'collectionRef', 
+            select: 'title'
+         })
+         .sort({ 'timestamp': -1 })
+         .limit(10)
+         .lean();
+
+      return items;
+   }
+
    getForEdit = async (id) => {
       const item = await Item.findById(id)
          .populate('fields.fieldRef')
@@ -59,6 +76,8 @@ class ItemService {
    deleteOneById = async (id) => {
       const deletedItem = await Item.findByIdAndDelete(id).lean();
       this.isItemFound(deletedItem);
+      const count = await Item.count({ collectionRef: deletedItem.collectionRef });
+      await Collection.findByIdAndUpdate(deletedItem.collectionRef, { itemsCount: count });
 
       return { ...deletedItem};
    };
@@ -68,9 +87,9 @@ class ItemService {
       const count = await Item.count({ collectionRef: items[0].collectionRef });
       await Collection.findByIdAndUpdate(items[0].collectionRef, { itemsCount: count });
 
-      return items;
+      return { items, count };
    }
-   
+
    getCollectionItems = async (collectionId, orderBy, order, page, rowsPerPage) => {
       const count = await Item.count({ collectionRef: collectionId });
       const items = await Item.find({ collectionRef: collectionId })

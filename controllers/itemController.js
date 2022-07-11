@@ -27,6 +27,17 @@ class ItemController {
       }
    };
 
+   getLatest = async (req, res) => {
+      try {
+         const items = await itemService.getLatest();
+
+         return res.json(items);
+      } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   }
+
    getForEdit = async (req, res) => {
       try {
          const { id } = req.params;

@@ -31,6 +31,16 @@ class CollectionService {
       return collection; 
    };
 
+   getLargest = async () => {
+      const collections = await Collection.find()
+         .populate({ path: 'userRef', select: 'username'})
+         .sort({ 'itemsCount': -1  })
+         .limit(5)
+         .lean();
+
+      return collections;
+   }
+
    updateOneById = async (id, collection, fields) => {
       const updatedCollection = await Collection.findByIdAndUpdate(id, collection).lean();
       this.isCollectionFound(updatedCollection);

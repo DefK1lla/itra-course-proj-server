@@ -7,6 +7,7 @@ const itemController = require('../controllers/itemController');
 const itemRouter = new Router();
 
 itemRouter.post('/', authMiddleware, itemAccessCheck, itemController.create);
+itemRouter.get('/latest', itemController.getLatest);
 itemRouter.get('/:id', itemController.getOne);
 itemRouter.get('/:id/edit', authMiddleware, itemAccessCheck, itemController.getForEdit);
 itemRouter.get('/:collectionId/collection', itemController.getCollectionItems);

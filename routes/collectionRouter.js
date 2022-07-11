@@ -6,6 +6,7 @@ const collectionAccessCheck = require('../middlewares/collectionAccessCheck');
 
 const collectionRouter = new Router();
 
+collectionRouter.get('/largest', collectionController.getLargest);
 collectionRouter.get('/:id', collectionController.getOne);
 collectionRouter.get('/user/:userId', collectionController.getUserCollections);
 collectionRouter.post('/', authMiddleware, collectionAccessCheck, collectionController.create);

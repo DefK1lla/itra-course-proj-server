@@ -26,6 +26,17 @@ class CollectionController {
       }
    };
 
+   getLargest = async (req, res) => {
+      try {
+         const collections = await collectionService.getLargest();
+
+         return res.json(collections);
+      } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
    updateOne = async (req, res) => {
       try {
          const { id } = req.params;
