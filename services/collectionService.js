@@ -1,7 +1,6 @@
 const Collection = require('../models/Collection');
 const Field = require('../models/Field');
 const Item = require('../models/Item');
-const itemService = require('../services/itemService');
 
 class CollectionService {
    create = async (collection, fields) => {

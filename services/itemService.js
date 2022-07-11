@@ -63,8 +63,21 @@ class ItemService {
       return { ...deletedItem};
    };
 
-   deleteCollectionItems = async (collectionId) => {
-      await Item.deleteMany({ collectionRef: collectionId });
+   deleteManyById = async (ids) => {
+      const items = await Promise.all(ids.map(id => Item.findByIdAndDelete(id)));
+      const count = await Item.count({ collectionRef: items[0].collectionRef });
+      await Collection.findByIdAndUpdate(items[0].collectionRef, { itemsCount: count });
+
+      return items;
+   }
+   
+   getCollectionItems = async (collectionId, orderBy, order, page, rowsPerPage) => {
+      const count = await Item.count({ collectionRef: collectionId });
+      const items = await Item.find({ collectionRef: collectionId })
+         .populate('fields.fieldRef')
+         .limit(rowsPerPage).sort({ [orderBy]: order }).skip(page * rowsPerPage)
+         .lean();
+      return { items, count };
    };
 
    like = async (id, userId) => {

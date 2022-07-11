@@ -52,6 +52,19 @@ class ItemController {
       }
    };
 
+   getCollectionItems = async (req, res) => {
+      try {
+         const { collectionId } = req.params;
+         const { orderBy, order, page, rowsPerPage } = req.query;
+         const data = await itemService.getCollectionItems(collectionId, orderBy, order, page, rowsPerPage );
+
+         return res.json(data);
+      } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   };
+
    deleteOne = async (req, res) => {
       try {
          const { id } = req.params;
@@ -63,6 +76,18 @@ class ItemController {
          errorHandler(res, e);
       }
    };
+
+   deleteMany = async (req, res) => {
+      try {
+         const { ids } = req.query;
+         const data = await itemService.deleteManyById(ids);
+
+         return res.json(data);
+      } catch (e) {
+         console.log(e);
+         errorHandler(res, e);
+      }
+   }
 
    like = async (req, res) => {
       try {

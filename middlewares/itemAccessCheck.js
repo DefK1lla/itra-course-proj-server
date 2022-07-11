@@ -8,6 +8,15 @@ module.exports = async function (req, res, next) {
    try {
       if (req.user.role === 'ADMIN') return next();
 
+      if (req.query.ids?.length && req.query.ids?.length !== 0) {
+         for (id of req.query.ids) {
+            const item = await itemService.getOneById(id);
+            if (id == item.userRef._id) return res.status(403).json({ message: 'Forbidden' });
+         }
+
+         return next();
+      }
+
       if (req.method === 'POST') {
          if (String(req.body.userRef) === String(req.user._id)) return next();
          return res.status(403).json({ message: 'Forbidden' });
