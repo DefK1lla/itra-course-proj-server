@@ -6,7 +6,6 @@ class CommentController {
       try {
          const { itemId } = req.params;
          const { text } = req.body;
-         console.log(req.body)
          const userId = req.user._id;
          const data = await commentService.create(text, itemId, userId);
 

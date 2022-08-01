@@ -2,7 +2,6 @@ const Comment = require('../models/Comment');
 
 class CommentService {
    create = async (text, itemId, userId) => {
-      console.log(text)
       const newComment = await new Comment({
          text,
          userRef: userId,
