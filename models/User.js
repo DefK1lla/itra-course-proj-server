@@ -9,4 +9,6 @@ const User = new Schema({
    timestamp: { type: Number, required: true, default: Date.now }
 });
 
+User.index({ username: 'text' });
+
 module.exports = model('User', User);

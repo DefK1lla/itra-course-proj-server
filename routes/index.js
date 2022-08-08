@@ -7,6 +7,7 @@ const itemRouter = require('./itemRouter');
 const fileRouter = require('./fileRouter');
 const tagRouter = require('./tagRouter');
 const commentRouter = require('./commentRouter');
+const searchRouter = require('./searchRouter');
 
 const router = new Router();
 
@@ -18,5 +19,6 @@ router.use('/item', itemRouter);
 router.use('/file', fileRouter);
 router.use('/tag', tagRouter);
 router.use('/comment', commentRouter);
+router.use('/search', searchRouter);
 
 module.exports = router;

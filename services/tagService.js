@@ -20,14 +20,14 @@ class TagService {
       const tags = await Tag.aggregate([
          {
            $search: {
-               index: "autocomplete",
+               index: 'autocomplete',
                autocomplete: {
                   query: keyword,
-                  path: "title",
+                  path: 'title',
                   fuzzy: {
-                  maxEdits: 1,
+                     maxEdits: 1,
                   },
-                  tokenOrder: "sequential",
+                  tokenOrder: 'sequential',
                },
             },
          },
