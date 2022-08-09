@@ -102,6 +102,7 @@ class SearchService {
                userRef: 1,
                likesCount: 1,
                timestamp: 1,
+               tags: 1,
                score: {
                   $meta: 'searchScore'
                }
