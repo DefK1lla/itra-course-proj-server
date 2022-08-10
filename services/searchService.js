@@ -112,10 +112,10 @@ class SearchService {
 
       const start = limit * (page - 1);
       const end = start + limit;
-      const result = items.concat(collections).sort((a, b) => b.score - a.score).slice(start, end);
+      const result = items.concat(collections).sort((a, b) => b.score - a.score);
 
       return {
-         result,
+         result: result.slice(start, end),
          count: result.length
       };
    };
