@@ -54,7 +54,7 @@ class UserService {
          .limit(rowsPerPage).sort({ [orderBy]: order }).skip(page * rowsPerPage)
          .lean();
 
-     return { users, count };
+      return { users, count };
    };
 
    getOneById = async (id) => {
@@ -83,9 +83,9 @@ class UserService {
             .lean()
       )));
 
-        this.isUserFound(users);
+      this.isUserFound(users);
 
-        return users;
+      return users;
     };
 
    deleteById = async (userIds) => {
