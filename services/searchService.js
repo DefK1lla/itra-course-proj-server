@@ -4,6 +4,7 @@ const User = require('../models/User');
 
 class SearchService {
    fullTextSearch = async (keyword, page, limit) => {
+      const regExp = new RegExp(keyword, 'ig');
       const collections = await Collection.aggregate([
          { 
             $search: {
@@ -126,7 +127,7 @@ class SearchService {
    };
 
    userSearch = async (keyword, orderBy, order, page, rowsPerPage) => {
-      const searchRegExp = new RegExp(keyword);
+      const searchRegExp = new RegExp(keyword, 'ig');
       const count = await User.count({
          username: {
             $regex: searchRegExp
@@ -146,8 +147,8 @@ class SearchService {
       return { users, count };
    };
 
-   isFound = (res) => {
-      if (!res) {
+   isFound = (result) => {
+      if (!result) {
          throw {
             status: 404,
             error: {
