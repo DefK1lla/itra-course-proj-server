@@ -2,7 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   DB_URI: process.env.DB_URI,
-  PORT: process.env.port || 5000,
+  PORT: process.env.PORT || 5000,
   SECRET_KEY: process.env.SECRET_KEY,
   MY_AWS_BUCKET_NAME: process.env.MY_BUCKET_NAME,
   MY_AWS_BUCKET_REGION: process.env.MY_BUCKET_REG,
