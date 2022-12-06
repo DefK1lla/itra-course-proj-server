@@ -4,7 +4,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 
-const { PORT, DB_URI } = require('./utils/config');
+const { port, DB_URI } = require('./utils/config');
 const router = require('./routes/index');
 
 const app = express();
@@ -16,16 +16,16 @@ app.use(fileUpload({}));
 app.use('/api', router);
 
 const start = async () => {
-   try {
-      await mongoose.connect(DB_URI);
+  try {
+    await mongoose.connect(DB_URI);
 
-      app.listen(PORT, () => {
-         console.log('Server started', PORT);
-      });
+    app.listen(port, () => {
+      console.log('Server started', port);
+    });
 
-   } catch (e) {
-      console.log(e)
-   }
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 start();
